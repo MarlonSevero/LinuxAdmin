@@ -1,0 +1,114 @@
+Autofs - Sistema de Automontagem. 
+
+Sistema para realizacao de montagem de disco / qualquer dispositivo.
+
+Vamos passar a instrucao para que toda vez que executarmos, cd /data/crypt vai disparar uma acao de montagem de maneira automatica.
+
+Instalacao do autofs.
+
+    apt install autofs -y.
+
+    
+Vamos deixar a montagem automatica ao entrar no /data/crypto com o autofs. 
+
+    Dentro de /etc/auto.master podemos realizar a configuracao.
+    Na linha 08 realizamos o apontamento do diretorio base para montagem. 
+    config >> /data   /etc/auto.crypt --timeout 30
+
+    Dentro do auto.crypto que vamos dizer como ele vai montar. Precisamos criar ele. 
+
+    No arquivo, escrevemos : 
+
+    crypt      -fstype=xfs,rw 	               :/dev/mapper/crypt 
+
+    |key word|  |system file, read / write|     |dispositivo, caminho montagem|
+
+Depois de sair e salva. Podemos reiniciar o servico autofs.
+
+systemctl restart autofs 
+systemctl enable autofs 
+
+Dessa maneira, toda vez que digitamos o cd /data/crypt ele realiza a Checagem da key e monta. 
+
+------------------------------------------------------------------------------------------
+
+OpenSSH - Conexoes Remota 
+
+O ssh e a ferramenta de conexao remota mais utlizada em ambientes linux. 
+
+* Ele por padrao roda na porta 22, utilizando o protocolo TCP. 
+* Usuario admin, root
+
+Vamos melhorar a config padrao do SSH.
+
+1) MUDAR PORTA 
+2) NAO PERMITIR CONEXAO COM USUARIO ROOT
+3) LIMITAR ACESSO SOMENTE DO USUARIO ANALISTA
+4) CONFIG DE BANNER 
+5) CONEXAO UTILIZANDO CHAVE (1x1)
+
+
+*CONEXAO UTILIZANDO CHAVE (1x1)
+    Como gerar as key pair (publica e privada) ?
+
+    *chave privada (chave do usuario)
+    *chave publica (vamos enviar para cada servidor)
+
+    E necessario a chave publica, nos destinos. Ele vai validar a publica pra ver se bate. 
+
+        autorized_keys -> nossa chave publica, depois de autorizada vai ficar dentro desse arquivo. 
+
+    Gerando a chave :
+        ssh-keygen -t rsa -b 2048 -C usuario@hostname
+
+    *Apos isso, elas vao estar localizada por padrao dentro do /home/analista/.ssh/
+    Agora vamos mandar a chave publica, para a maquina destino. O servico de ssh faz de maneira automatica:
+
+        ssh-copy-id usuario@host_ip
+
+    Ao executar o comando, ele vai mostrar a chave sendo adicionada.
+
+    Depois disso conseguimos logar na maquina sem problema.
+
+        ssh usuario@192.168.1.1
+
+    Podemos realizar a consulta do estado das conexoes do host:
+
+        *ss -ntpl
+
+    Para mudarmos a porta, vamos no cd /etc/ssh/sshd_config , descomentamos a linha da #Port e definimos uma alta de preferencia
+    para aumentar a seguranca. 
+
+*NAO PERMITIR CONEXAO COM USUARIO ROOT COMO LOGIN DIRETO 
+
+    Podemos ir no arquivo cd /etc/ssh/sshd_config e descomentar a linha #PermitRootLogin e definir a opcao 'no'.
+
+*LIMITAR ACESSO SOMENTE DO USUARIO ANALISTA
+
+Para limitar o acesso via ssh somente para usuarios especificos demos que colocar a opcao manualmente em baixo 
+das opcoes de #Authentication no arquivo /etc/ssh/sshd_config:
+    AllowUsers usuario1,usuario2
+
+Desabilitando o metodo do senha normal, sem key.
+
+# To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication yes
+
+PasswordAuthentication yes
+
+* CONFIG DE BANNER 
+No arquivo /etc/ssh/sshd_config vamos habilitar o banner. Assim podemos colocar avisos.
+    # no default banner path
+    Banner etc/issue.ne
+
+
+**DEPOIS DE TODAS CONFIGS, VAMOS REINICIAR O SERVICO DO SSH PARA AS MUDANCAS ENTRAREM EM VIGOR.
+    systemctl restart sshd
+
+Caso em algum momento voltarmos a conectar nessa maquina, vamos precisar especificar a porta por nao ser a padrao.
+
+ssh -p 52001 usuario@192.168.1.1
+
+ps. Em Debian precisamos realizar a instalacao do ssh com:
+    apt install openssh-server --fix-missing -y 
+    
