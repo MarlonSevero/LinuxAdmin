@@ -30,7 +30,7 @@ hostnamectl - nome da maquina + arquitetura, etc
 pwd : Lista o diretorio que voce esta localizado no momento. *Print Work Directory
 
 cd : Entrar/abrir a pasta que selecionarmos. *Change Directory
-
+teste
 $ : usuario comum
 
 # : super usuario root
