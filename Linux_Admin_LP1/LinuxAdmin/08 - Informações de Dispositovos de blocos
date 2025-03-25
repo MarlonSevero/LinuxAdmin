@@ -1,4 +1,14 @@
 Informações de Dispositovos de Blocos
+Identificação de Dispositivos (blkid)
+
+O comando blkid exibe informações sobre dispositivos de armazenamento.
+
+📌 Exemplo:
+
+blkid
+
+
+
 
 Script- Programa utilizado para captura de comandos e resultados do terminal.
 
