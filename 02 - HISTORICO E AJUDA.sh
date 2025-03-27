@@ -1,4 +1,3 @@
-Aqui está a versão reestruturada do seu conteúdo para melhor organização e clareza:
 
 ⸻
 

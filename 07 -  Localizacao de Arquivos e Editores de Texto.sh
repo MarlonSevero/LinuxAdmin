@@ -1,6 +1,4 @@
-Aqui está a versão mais detalhada e bem explicada do seu material, incluindo conceitos como 2>, 1>, &>, além de uma explicação mais estruturada:
 
-⸻
 
 07 - Localização de Arquivos e Editores de Texto
 
@@ -224,19 +222,6 @@ sed -i 's/feira/supermercado/g' arquivo.txt
 🔹 Remover linhas contendo “feira” (/d)
 
 sed -e '/feira/d' arquivo.txt
-
-
-
-⸻
-
-Identificação de Dispositivos (blkid)
-
-O comando blkid exibe informações sobre dispositivos de armazenamento.
-
-📌 Exemplo:
-
-blkid
-
 
 
 ⸻

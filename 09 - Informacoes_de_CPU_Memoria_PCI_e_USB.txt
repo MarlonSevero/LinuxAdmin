@@ -1,31 +1,31 @@
-09 - Informações de Dispositivos
+Aqui está o conteúdo reorganizado e unificado:
 
-free -h : utilizado para capturar e vizualizar a quantidade de uso da memoria e da swap.
+⸻
 
+🔍 Informações de Dispositivos no Linux
 
-cat /proc/meminfo : utilizado para vizualizar as info da memoria, porem direto no arquivo que atualiza de forma 
-dinamica.
+🖥️ Monitoramento de Memória
+	•	free -h → Exibe o uso da memória RAM e da área de swap.
+	•	cat /proc/meminfo → Mostra detalhes da memória diretamente do sistema, com atualização dinâmica.
+	•	vmstat → Exibe estatísticas do uso de memória, CPU, disco e mais.
+	•	Exemplo: vmstat -D → Detalhes sobre dispositivos de armazenamento.
 
-top : muito parecido com o gerenciador de tarefa; Atualizado a cada 3 segundos.
+⸻
 
-cat /proc/cpuinfo : tras  as informações referente ao processador.
+⚙️ Informações do Processador
+	•	cat /proc/cpuinfo → Exibe informações detalhadas do processador.
+	•	lscpu → Alternativa ao cpuinfo, trazendo os mesmos detalhes de forma estruturada.
+	•	top → Similar ao Gerenciador de Tarefas, exibe processos em tempo real, atualizado a cada 3 segundos.
 
-lscpu : exibe as mesmas informações do cpuinfo.
+⸻
 
-vmstat : utilizado para vizualizar as info do uso de memoria. Pórem pode ser utilizado para cpu, disco, e 
-outras informações. Vale a pena dar um man vmstat
+📌 Dispositivos e Barramentos
+	•	lsusb → Lista dispositivos USB conectados.
+	•	lspci → Exibe dispositivos PCI do sistema.
+	•	Exemplo: lspci -k → Mostra os drivers do kernel associados aos dispositivos PCI.
+	•	lshw → Exibe informações detalhadas do hardware.
+	•	Exemplo: Pode exportar relatórios em .html e outros formatos.
 
-ex. vmstat -D 
+⸻
 
-lsusb : utilizado para validar informações de USB, quantidade, etc...
-
-lspci : exibe os dispositivos pci's.
-
-ex. lspci -k : tras o drive do kernel.
-
-lshw : trabalha a nivel de host, realiza a extrassao de algumas info de hardware da sua maquina.
-
-ex. podemos criar arquivos .html e outras extenções.
-
-
-
+✔️ Este guia fornece comandos essenciais para inspecionar memória, CPU e dispositivos no Linux. 🚀

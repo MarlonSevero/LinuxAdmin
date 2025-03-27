@@ -1,56 +1,71 @@
-Informações de Dispositovos de Blocos
-Identificação de Dispositivos (blkid)
+🖥️ Informações de Dispositivos de Bloco
+
+📌 Identificação de Dispositivos (blkid)
 
 O comando blkid exibe informações sobre dispositivos de armazenamento.
 
-📌 Exemplo:
+Exemplo:
 
 blkid
 
+💾 Preparação de um Disco para Uso
+
+Antes de usar um disco, é necessário prepará-lo (particioná-lo).
+
+📌 MBR (Master Boot Record)
+	•	Permite criar até 4 partições.
+	•	Pelo menos uma partição precisa ser estendida.
+	•	Nomeação de discos:
+	•	sd → Indica discos SATA ou SCSI.
+	•	sda → O “a” representa a ordem do disco.
+	•	sda1 - sda4 → Partições primárias ou estendidas.
+	•	sda5 → Partições lógicas começam no número 5.
+
+📌 GPT (GUID Partition Table)
+	•	Suporta partições maiores que o MBR.
+	•	Melhor compatibilidade com sistemas modernos.
+
+⸻
+
+📂 Visualização e Gerenciamento de Partições
+
+🔹 Exibir estrutura de discos e partições:
+
+lsblk   # Exibe uma visão estruturada dos discos e partições  
+
+🔹 Listar todas as partições do disco:
+
+fdisk -l   # Exibe detalhes das partições  
+fdisk -f   # Mostra o sistema de arquivos (file system)  
+
+🔹 Visualizar informações de partições diretamente do sistema:
+
+cat /proc/partitions  # Exibe a listagem das partições  
+
+📌 Importante: A presença de partições aqui não garante que elas estejam formatadas ou montadas.
+
+⸻
+
+📌 Montagem de Partições no Linux
+
+No Linux, as partições precisam ser associadas a um ponto de montagem dentro de um diretório.
+
+Exemplo de ponto de montagem:
+	•	sda1 → Normalmente montado em /boot.
+
+🔹 Verificar o uso de espaço em disco:
+
+df -hT   # Exibe espaço utilizado e disponível  
+
+🔹 Exibir onde os dispositivos estão montados:
+
+mount   # Lista pontos de montagem ativos  
 
 
 
-Script- Programa utilizado para captura de comandos e resultados do terminal.
+⸻
 
-ex. script -q disco.txt (-q forma silenciosa)
+✅ Conclusão
 
--a : realiza um append em um arquivo ja existente.
-
-Utilizado para captura de informações.
-
-Um disco para utilizado é necessario preparar (particionar ele)
-
-MBR : permite criar ate 4 partições.
-Pelo menos uma tem que ser extendida.
-
-sd - nomenclatura de discos.
-
-sda - o 'a' vem da ordem.
-
-1 - 4 : Primaria ou extendida.
-*** AS PARTIÇÕES LOGICAS COMEÇARAM NO 5 -> EX. sda5'
-
-GPT : Utilizado para partições maiores.
-
-lsblk : traz a visao estruturante de quais discos e partições temos desse disco.
-
-fdisk -l : utilizado para listar as partições 
-do disco. E varias informações importantes.
-
-fdisk -f : tras o file system.
-
-cat /proc/partitions : arquivo que contem a informação das partições.
-
-- Não quer dizer que as partições estao em disco.
-
-No linux, para usar as partições temos que ter um local para ter o ponto de montagem.
-
-Isso é armazenadao em um diretorio.
-
-Exemplo sda1 geralmente é montado em /boot
-
-df -hT : Utilizado principalmente para validar o espaço em uso e sem uso.
-
-mount : exibe onde os dispositivos estao montados
-
-
+✔️ Este guia cobre os principais comandos para identificar, particionar e montar discos no Linux.
+✔️ Com essas ferramentas, você pode gerenciar dispositivos de armazenamento com eficiência! 🚀

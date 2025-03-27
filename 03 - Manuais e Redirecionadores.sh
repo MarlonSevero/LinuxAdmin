@@ -1,4 +1,3 @@
-Aqui está a explicação organizada e detalhada sobre os conceitos abordados:
 
 ⸻
 

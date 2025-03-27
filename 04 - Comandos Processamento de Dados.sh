@@ -1,4 +1,3 @@
-Abaixo estão comandos essenciais para manipulação de arquivos, filtragem e ordenação no terminal Linux.
 
 ⸻
 
