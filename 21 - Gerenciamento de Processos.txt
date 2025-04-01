@@ -1,99 +1,121 @@
-Processos : Eventos internos do sistema.
+# Gerenciamento de Processos no Linux
 
-Evento / Processo{
-    Quem iniciou
-    PID (Process Indentification)
-    Qual Terminal
-    Processamento/memoria
-    Estado
-}
+## Conceito de Processos
+Processos são eventos internos do sistema operacional que representam a execução de programas.
 
-Systemd -> Principal processo em execucao no linux
+### Informações de um Processo
+Cada processo possui atributos importantes, como:
+- **Quem iniciou**
+- **PID** (Process Identification)
+- **Terminal associado**
+- **Uso de processamento e memória**
+- **Estado**
 
-PS
-    ps -aux -> Traz uma listagem de todos os processos 
+## Systemd
+O **Systemd** é o principal processo em execução no Linux, responsável por iniciar e gerenciar outros processos do sistema.
 
-    USER PID %CPU %MEM VSZ RSS TYY STAT START TIME COMMAND 
+---
+## Comandos para Gerenciar Processos
 
-    Ss - sleeping -> parado 
-    Rr - running  => em execucao 
+### `ps` - Listagem de Processos
+Exibe informações sobre processos em execução.
 
-    ls /proc -> traz o armazenamento dos processos 
+- `ps -aux` → Lista todos os processos ativos.
 
-    ps -aux | more -> traz pausadamente os processos em execucao.
+Formato da saída:
+```
+USER   PID  %CPU  %MEM  VSZ   RSS   TTY  STAT  START  TIME  COMMAND
+```
+- `Ss` - **Sleeping** (Parado)
+- `Rr` - **Running** (Em execução)
 
-    ps -aux | grep bash -> podemos realizar filtragens de processos, no exemplo o `bash`.
+Outros usos:
+- `ls /proc` → Exibe diretórios que armazenam informações sobre processos.
+- `ps -aux | more` → Exibe os processos de forma paginada.
+- `ps -aux | grep bash` → Filtra processos, neste caso, mostrando apenas processos relacionados ao `bash`.
+- `man ps` → Manual com diversos exemplos, como:
+  - `ps axjf` → Exibe processos em formato de árvore.
+  - `ps -u usuarioX` → Lista processos de um usuário específico.
 
+### `pgrep` - Buscar Processos
+- `pgrep -a bash` → Lista processos filtrando pelo nome.
+- `pstree -p` → Exibe processos em formato de árvore, facilitando a visualização da hierarquia.
 
-    Temos varios exemplos no -> man ps
-    ex. ps axjf -> traz em forma de arvore.
+### `pidof` - Obter PID de um Processo
+- `pidof top` → Retorna o ID do processo `top`.
 
-    ps -u usuarioX -> traz todos os processos de um determinado usuario
+---
+## Monitoramento Interativo
 
-PGREP
-    pgrep -a bash (menos info) podemos realizar filtragens de processos, no exemplo o `bash`.
-    pstree -p -> Traz em forma de arvore, mt bom utilizar.
+### `top` e `htop`
+Ferramentas interativas para monitoramento de processos em tempo real.
 
-PIDOF
-    Traz o id de um determinado programa/processo.
-    ex. pidof top 
+Atalhos úteis:
+- `D` → Altera o tempo de atualização.
+- `P` → Ordena por uso de CPU.
+- `M` → Ordena por uso de memória.
+- `>` / `<` → Navega entre processos.
+- `L` → Pesquisa um processo.
+- `Z` → Altera cores da interface.
+- `k` → Finaliza um processo informando seu PID.
 
-TOP e HTOP
-    Mostra de forma interativa, o status dos processos.
-    Podemos alterar o delay, clicando a letra `D`.
-    P - ordena por processador
-    M - ordena por memoria
-    > e < navega entre os processos.
-    L - Localiza por palavra 
-    Z - Altera as cores.
-    k - mata um processo, informando o PID
-    
-Finalizando Processo:
+---
+## Finalização de Processos
 
-    KILL - utilizado para mandar sinais de execucao de atividade. 
+### `kill` - Envio de Sinais para Processos
+- `kill -l` → Lista os sinais disponíveis.
+- Sinais mais usados:
+  - `15 (SIGTERM)` → Finaliza o processo de forma segura (padrão).
+  - `09 (SIGKILL)` → Mata o processo imediatamente.
+  - `03 (SIGQUIT)` → Sai do processo (equivalente a `Ctrl + C`).
 
-    kill -l -> lista quais sinais podemos usar. 
-        principais:
-            15 -> SIGTERM : PADRAO, finaliza o processo da maneira 'correta'.
-            09 -> SIGKILL : Mata o processo independente de qualquer coisa.
-            03 -> SIGQUIT : Sai do processo, igual ao ctrol + c
-    
-    pidof top
-    kill -9 19551 -> Utilizamos esses parametros para matar o processo.
-    
-    kill -19 19551 -> realiza o sigstop do processo, para ele.
-        kill -18 19551 -> volta pra execucao.
-    
-    pkill -9 top 
+Exemplo:
+```bash
+pidof top
+kill -9 19551  # Mata o processo com PID 19551
+kill -19 19551 # Pausa o processo
+kill -18 19551 # Retoma o processo
+```
 
-    killall -9 top 
-    
---TAREFAS NO SEGUNDO PLANO 
+### `pkill` e `killall`
+- `pkill -9 top` → Mata todos os processos com nome `top`.
+- `killall -9 top` → Mata todos os processos com nome `top`.
 
->> subonhamos q esteja no meio de uma edicao com vim.
-    > basta clicar ctrol + alt + Z
-    > jobs -> verifica as tarefas em segundo plano.
-    > fg 1 volta pra edicao vim 
-    > fg %2 volta pra edicao do 2 vim 
+---
+## Execução em Segundo Plano
 
-nohup -> Continua executando um programa msm com o terminal fechado.
-    ex. nohup ping -c 200 192.168.0.1      
-    tail -f nohup.out 
+Se estiver editando um arquivo no `vim` e precisar suspender a execução:
+- `Ctrl + Z` → Suspende a tarefa.
+- `jobs` → Lista os processos em segundo plano.
+- `fg 1` → Retoma o primeiro processo suspenso.
+- `fg %2` → Retoma o segundo processo suspenso.
 
---Prioridade. 
+### `nohup` - Manter um Processo Ativo Mesmo Após Fechar o Terminal
+```bash
+nohup ping -c 200 192.168.0.1 &
+tail -f nohup.out  # Verifica a saída do processo
+```
 
-nice -> qual prioridade queremos iniciar o programa.
+---
+## Controle de Prioridade
 
--20 -> Super Alta 
-0 -> normal
-19 -> baixa
+### `nice` - Definir Prioridade ao Iniciar um Processo
+- `-20` → Prioridade alta.
+- `0` → Prioridade normal.
+- `19` → Prioridade baixa.
 
-ex. nice -n -20 vim doc.txt  
+Exemplo:
+```bash
+nice -n -20 vim doc.txt  # Inicia o Vim com prioridade alta
+```
 
-Mudando a prioridade durante execucao.
+### `renice` - Alterar Prioridade de um Processo em Execução
+```bash
+pidof vim
+renice -n 20 -p 19856  # Altera a prioridade do processo 19856
+```
 
-pidof vim 
-renice -n 20 -p 19856
-
-
+---
+## Conclusão
+O gerenciamento de processos no Linux é fundamental para a administração de sistemas, permitindo monitorar, finalizar e ajustar a prioridade de execução conforme necessário.
 

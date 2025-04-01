@@ -1,77 +1,84 @@
-*Gereciador de Pacotes no Debian*
+Gerenciador de Pacotes no Debian
 
-Temos 2 gerenciadores, o de alto nivel e o de baixo nivel. 
+O Debian utiliza dois tipos de gerenciadores de pacotes:
+	•	Alto nível: Gerencia pacotes e dependências automaticamente, utilizando repositórios. (APT)
+	•	Baixo nível: Trabalha diretamente com pacotes .deb, sem resolver dependências automaticamente. (DPKG)
 
--apt : Alto nivel, utiliza repositorios. 
-       Este diretorios, ficam dentro de /etc/apt/sources.list 
-       Vamos ter as linhas do repositorio principais, seguranca e outros. 
-       
-       deb https : pacotes .deb pre-compilados 
-       deb-src   : codigo fonte
+1️⃣ Gerenciador APT (Advanced Package Tool)
 
-       Toda districuicao recebe um nome referenciado o toyStory
-       *Podemos adicionar novos repositorios.
+O APT gerencia pacotes a partir dos repositórios configurados em:
+📌 Arquivo de repositórios: /etc/apt/sources.list
+?≥📌 Tipos de repositórios:
+	•	deb https://... → Pacotes pré-compilados (.deb).
+	•	deb-src https://... → Código fonte dos pacotes.
 
-       apt update : faz a atualizacao da lista do que tem no repositorio com a sua maquina. 
+💡 As distribuições Debian são nomeadas com referências ao filme Toy Story (ex.: Jessie, Buster, Bullseye).
 
-       apt list --upgradable : mostra somente o que precisa ser atualizado
-       
-       apt list : lista todos pacotes instalados na maquina. 
-       
-       apt upgrade : atualiza os pacotes da sua maquina. 
+📌 Principais comandos do APT
 
-       apt show pacote : Mostra um pequeno resumo para que serve o pacote e suas dependencias.
-
-       apt search *network : buscamos todos os pacotes que tem network relacionado, comando usado para procura de pacotes quando nao sabemos o nome.
-
-       apt install pacote1 pacote2 pacote3 -y : realiza a instalacao dos pacotes, podemos fazer isso com mais de 1 pacote.
-
-       apt remove pacote : realiza a remocao do pacote, porem nao as dependencias. Porem arquivos alterados continuam na maquina 
-
-       apt remove --purge :  realiza a remocao do pacote, porem nao as dependencias. Porem arquivos alterados tambem sao removidos da maquina.
-
-       apt download iftop : realiza a instalacao do pacote .deb que e o pacote ja pre-compilado.
-
-       apt clean : realiza a limpeza do cache 
-
-*Instalacao / execucao de um programa a partir do codigo fonte.
-
-       cd /opt 
-       apt source pacote : Realiza o download do codigo fonte do pacote. 
-       cd pacote_codigo_fonte : entrar dentro da pasta do pacote 
-       apt build-dep htop : realiza a instalacao das depencias do pacote. 
-       ./configure 
-       make 
-       make check 
-       make install        
-       **depois disso podemos usar o pacote na teoria.
-
--dpkg : Baixo Nivel 
-
-        dpkg -l pacote : traz se o pacote esta instalado ou nao. 
-        
-       dpkg -la : tudo instalado
-
-        dpkg -i nome_pacote.deb : realiza a instalacao de pacotes .deb pre-compilados.
-        
-        dpkg -L nome_pacote : traz quais sao os arquivos que compoem esse pacote. E o local onde eles estao. 
-        
-        dpkg -s pacote : mostra o status do pacote.
-        
-        dpkg -r pacote : realiza a remocao do pacote.
-
-        apkg -S /bin/arq_bin : Utilizado para sabermos qual pacote esta presente o bin. Para outros pacotes, como se fosse uma engenharia reversa.
-
-        dpkg -C pacote : mostra os problemas de integridade do pacote. 
-
-*Conversao de arquivo .rpm -> .deb ou .deb > .rpm 
-
-       CentOs trabalha com pacotes pre-compilados do tipo .rpm 
-
-       Sempre existe um risco, quanto mais complexo o programa.
-
-       apt install alien build-essential -y 
-       alien -r iftop pacote.deb : Realiza a conversao de deb para rpm 
+Comando	Descrição
+apt update	Atualiza a lista de pacotes disponíveis nos repositórios.
+apt list --upgradable	Lista pacotes que possuem atualizações pendentes.
+apt list	Lista todos os pacotes instalados no sistema.
+apt upgrade	Atualiza todos os pacotes do sistema.
+apt show pacote	Exibe informações detalhadas sobre um pacote (descrição, dependências, etc.).
+apt search termo	Pesquisa pacotes relacionados a um termo específico. Exemplo: apt search network.
+apt install pacote1 pacote2 -y	Instala um ou mais pacotes.
+apt remove pacote	Remove um pacote, mas mantém as dependências e arquivos de configuração.
+apt remove --purge pacote	Remove um pacote e todos os arquivos de configuração.
+apt download pacote	Baixa um pacote .deb, sem instalá-lo.
+apt clean	Limpa arquivos de cache do APT.
 
 
 
+⸻
+
+2️⃣ Instalação a partir do Código Fonte
+
+Caso um pacote não esteja disponível no repositório oficial, ele pode ser compilado manualmente:
+
+cd /opt
+apt source pacote          # Baixa o código-fonte do pacote
+cd pacote_codigo_fonte     # Entra no diretório do código-fonte
+apt build-dep pacote       # Instala as dependências necessárias
+./configure                # Configura a compilação
+make                       # Compila o programa
+make check                 # Verifica se há erros
+make install               # Instala o programa no sistema
+
+Após a instalação, o programa pode ser utilizado normalmente.
+
+⸻
+
+3️⃣ Gerenciador DPKG (Debian Package Manager)
+
+O dpkg gerencia pacotes .deb diretamente, sem resolver dependências.
+
+📌 Principais comandos do DPKG
+
+Comando	Descrição
+dpkg -l pacote	Verifica se um pacote está instalado.
+dpkg -la	Lista todos os pacotes instalados.
+dpkg -i pacote.deb	Instala um pacote .deb manualmente.
+dpkg -L pacote	Lista os arquivos pertencentes a um pacote e suas localizações.
+dpkg -s pacote	Mostra o status detalhado de um pacote.
+dpkg -r pacote	Remove um pacote, mas mantém os arquivos de configuração.
+dpkg -C	Verifica problemas de integridade nos pacotes instalados.
+dpkg -S /bin/arquivo	Descobre a qual pacote pertence um determinado arquivo binário.
+
+
+
+⸻
+
+4️⃣ Conversão de Pacotes (.rpm ⇄ .deb)
+
+O CentOS e Fedora utilizam pacotes no formato .rpm, enquanto o Debian e Ubuntu utilizam .deb.
+Em alguns casos, é possível converter pacotes entre os formatos com a ferramenta Alien:
+
+📌 Instalar e usar o Alien
+
+apt install alien build-essential -y   # Instala o conversor Alien
+alien -r pacote.deb                    # Converte .deb para .rpm
+alien -d pacote.rpm                     # Converte .rpm para .deb
+
+⚠️ Atenção: A conversão pode gerar problemas de compatibilidade, principalmente em pacotes mais complexos.
